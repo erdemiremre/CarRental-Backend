@@ -11,6 +11,8 @@ Interceptor,
 
 Autofac,
 
+JWT- Json Web Token,
+
 AOP, Aspect Oriented Programming,
 
 Validation,
