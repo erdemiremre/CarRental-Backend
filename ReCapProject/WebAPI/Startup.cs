@@ -83,6 +83,8 @@ namespace WebAPI
 
             app.UseRouting();
 
+            app.UseStaticFiles(); //wwwroot klasöründe yer alan dosyalara doðrudan eriþim imkaný verir.
+
             app.UseAuthentication(); //yaþam döngüsü
 
             app.UseAuthorization();

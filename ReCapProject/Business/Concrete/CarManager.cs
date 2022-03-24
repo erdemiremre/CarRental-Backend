@@ -25,7 +25,7 @@ namespace Business.Concrete
 
         
         [ValidationAspect(typeof(CarValidator))]
-        [SecuredOperation("product.add")]
+        //[SecuredOperation("product.add")]
         public IResult Add(Car car)
         {
             BusinessRules.Run();
@@ -65,6 +65,21 @@ namespace Business.Concrete
         public IDataResult<List<CarDetailDto>> GetByColorId(int colorId)
         {
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails().Where(c=>c.ColorId==colorId).ToList());
+        }
+
+        public IDataResult<List<CarDetailsWithImage>> GetFilteredCars(int brandId, int colorId, decimal minDailyPrice, decimal maxDailyPrice)
+        {
+            return new SuccessDataResult<List<CarDetailsWithImage>>(_carDal.GetFilteredCars(brandId, colorId, minDailyPrice, maxDailyPrice),Messages.CarListed);
+        }
+
+        public IDataResult<List<CarDetailsWithImage>> GetCarDetailsWithImage()
+        {
+            return new SuccessDataResult<List<CarDetailsWithImage>>(_carDal.GetCarDetailsWithImage());
+        }
+
+        public IDataResult<List<CarDetailsWithImage>> GetCarDetailsWithImageById(int carId)
+        {
+            return new SuccessDataResult<List<CarDetailsWithImage>>(_carDal.GetCarDetailsWithImageById(carId));
         }
     }
 }

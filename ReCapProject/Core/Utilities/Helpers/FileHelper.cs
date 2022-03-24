@@ -30,6 +30,9 @@ namespace Core.Utilities.Helpers
                 return new ErrorResult(typeValid.Message);
             }
 
+
+
+
             CheckDirectoryExists(_currentDirectory + _folderName);
             CreateImageFile(_currentDirectory + _folderName + randomName + type, file);
             return new SuccessResult((_folderName + randomName + type).Replace("\\", "/"));
