@@ -94,6 +94,37 @@ namespace DataAccess.Concrete.EntityFramework
             }
         }
 
+        //Filtreleme Refaktör İşlemi
+        public List<CarDetailsWithImage> GetByFilteredCars(CarFilterDetailDto filterDto)
+        {
+            using (RecapDbContext context = new RecapDbContext())
+            {
+                var filterExpression = GetFilterExpression(filterDto);
+                var result = from car in filterExpression == null ? context.Cars : context.Cars.Where(filterExpression)
+                             join color in context.Colors
+                             on car.ColorId equals color.ColorId
+                             join brand in context.Brands
+                             on car.BrandId equals brand.BrandId
+                             select new CarDetailsWithImage
+                             {
+                                 CarId = car.CarId,
+                                 BrandName = brand.BrandName,
+                                 ColorName = color.ColorName,
+                                 Model = car.Model,
+                                 ModelYear = car.ModelYear,
+                                 DailyPrice = car.DailyPrice,
+                                 //ImagePath = carimage.ImagePath,
+                                 ImagePath = (from i in context.CarImages where i.CarId == car.CarId select i.ImagePath).ToList(),
+                                 Description = car.Description
+
+                             };
+                return result.ToList();
+            }
+        }
+
+
+
+
         public List<CarDetailsWithImage> GetFilteredCars(int brandId, int colorId, decimal minDailyPrice, decimal maxDailyPrice)
         {
             using (RecapDbContext context=new RecapDbContext())

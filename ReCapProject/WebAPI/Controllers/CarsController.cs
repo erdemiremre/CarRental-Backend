@@ -96,15 +96,26 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
         [HttpGet("getfilteredcars")]
-        public IActionResult GetFilteredCars(int brandId, int colorId, decimal minDailyPrice, decimal maxDailyPrice)
+        public IActionResult GetFilteredCars(int brandId, int colorId, decimal? minDailyPrice, decimal? maxDailyPrice)
         {
-            var result = _carService.GetFilteredCars(brandId,colorId,minDailyPrice,maxDailyPrice);
+            var result = _carService.GetFilteredCars(brandId, colorId, minDailyPrice, maxDailyPrice);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
+
+        //[HttpGet("getfilteredcars")]
+        //public IActionResult GetCarsDetails([FromQuery] CarFilterDetailDto filterDto)
+        //{
+        //    var result = _carService.GetByFilteredCars(filterDto);
+        //    if (result.Success)
+        //    {
+        //        return Ok(result);
+        //    }
+        //    return BadRequest(result);
+        //}
 
     }
 }

@@ -2,6 +2,7 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Results;
@@ -26,6 +27,7 @@ namespace Business.Concrete
         
         [ValidationAspect(typeof(CarValidator))]
         //[SecuredOperation("product.add")]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Add(Car car)
         {
             BusinessRules.Run();
@@ -37,6 +39,8 @@ namespace Business.Concrete
             _carDal.Delete(car);
             return new SuccessResult(Messages.CarDeleted);
         }
+
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Update(Car car)
         {
             _carDal.Update(car);
@@ -72,6 +76,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarDetailsWithImage>>(_carDal.GetFilteredCars(brandId, colorId, minDailyPrice, maxDailyPrice),Messages.CarListed);
         }
 
+        [CacheAspect]
         public IDataResult<List<CarDetailsWithImage>> GetCarDetailsWithImage()
         {
             return new SuccessDataResult<List<CarDetailsWithImage>>(_carDal.GetCarDetailsWithImage());
@@ -80,6 +85,13 @@ namespace Business.Concrete
         public IDataResult<List<CarDetailsWithImage>> GetCarDetailsWithImageById(int carId)
         {
             return new SuccessDataResult<List<CarDetailsWithImage>>(_carDal.GetCarDetailsWithImageById(carId));
+        }
+
+
+        //Exp. Filtreleme...Core-Ef-Repo üzerinden
+        public IDataResult<List<CarDetailsWithImage>> GetByFilteredCars(CarFilterDetailDto filterDto)
+        {
+            return new SuccessDataResult<List<CarDetailsWithImage>>(_carDal.GetByFilteredCars(filterDto), Messages.CarListed);
         }
     }
 }
